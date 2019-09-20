@@ -28,11 +28,13 @@ def generate_table(dataframe, max_rows=20):
     )
 
 
-app.layout = html.Div(children=[
-    html.H4(children='FAERS Drug Data 2012-2019'),
-    dcc.Dropdown(id='dropdown1', options=[
-        {'label': i, 'value': i} for i in df.AGE.unique()
-    ], multi=True, placeholder='Filter by age...'),
+app.layout = html.Div([
+    html.H2('Hello World'),
+    dcc.Dropdown(
+        id='dropdown',
+        options=[{'label': i, 'value': i} for i in ['LA', 'NYC', 'MTL']],
+        value='LA'
+    ),
     html.Div(id='display-value')
 ])
 
