@@ -4,6 +4,12 @@ import dash_html_components as html
 
 import pandas as pd
 
+app = dash.Dash(__name__)
+
+app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
+
+server = app.server
+
 df = pd.read_csv('pain_result.csv')
 df.drop('Unnamed: 0',axis=1,inplace=True)
 df.drop_duplicates(keep = False, inplace=True)
@@ -18,8 +24,6 @@ def generate_table(dataframe, max_rows=20):
             html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
         ]) for i in range(min(len(dataframe), max_rows))]
     )
-
-app = dash.Dash(__name__)
 
 app.layout = html.Div(children=[
     html.H4(children='FAERS Drug Data 2012-2019'),
@@ -49,7 +53,5 @@ def display_table(dropdown_value1,dropdown_value2):
         listing = generate_table(listing_df)
         return listing
     
-app.css.append_css({"external_url": "https://codepen.io/chriddyp/pen/bWLwgP.css"})
-
 if __name__ == '__main__':
     app.run_server(debug=True)
