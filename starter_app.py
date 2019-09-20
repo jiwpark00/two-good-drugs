@@ -10,12 +10,6 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 server = app.server
 
-import pandas as pd
-
-df = pd.read_csv('pain_result.csv')
-df.drop('Unnamed: 0',axis=1,inplace=True)
-df.drop_duplicates(keep = False, inplace=True)
-
 def generate_table(dataframe, max_rows=20):
     return html.Table(
         # Header
