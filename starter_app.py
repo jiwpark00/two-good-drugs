@@ -7,7 +7,7 @@ import dash_html_components as html
 import pandas as pd
 
 df = pd.read_csv('pain_result_small.csv')
-df = df.drop('Unnamed: 0',axis=1)
+#df = df.drop('Unnamed: 0',axis=1)
 df = df.drop_duplicates()
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -23,7 +23,7 @@ def generate_table(dataframe, max_rows=20):
 
         # Body
         [html.Tr([
-            html.Td(dataframe.ix[i].col) for col in dataframe.columns
+            html.Td(dataframe.ix[i][col]) for col in dataframe.columns
         ]) for i in range(min(len(dataframe), max_rows))]
     )
 
