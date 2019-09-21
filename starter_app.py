@@ -28,14 +28,15 @@ def generate_table(dataframe, max_rows=20):
     )
 
 
-app.layout = html.Div([
-    html.H2('Hello World'),
-    dcc.Dropdown(
-        id='dropdown',
-        options=[{'label': i, 'value': i} for i in ['LA', 'NYC', 'MTL','BOS']],
-        value='LA'
-    ),
-    html.Div(id='display-value')
+app.layout = html.Div(children=[
+    html.H4(children='FAERS Drug Data 2012-2019'),
+    dcc.Dropdown(id='dropdown1', options=[
+        {'label': i, 'value': i} for i in df.AGE.unique()
+    ], multi=True, placeholder='Filter by age...'),
+    dcc.Dropdown(id='dropdown2', options=[
+        {'label': i, 'value': i} for i in df.GNDR_COD.unique()
+    ], multi=True, placeholder='Filter by gender...'),
+    html.Div(id='table-container1')
 ])
 
 @app.callback(dash.dependencies.Output('display-value', 'children'),
