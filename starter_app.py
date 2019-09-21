@@ -8,8 +8,8 @@ import dash_html_components as html
 
 from pandas import read_csv
 df = pd.read_csv('pain_result.csv')
-df.drop('Unnamed: 0',axis=1,inplace=True)
-df.drop_duplicates(keep = False, inplace=True)
+#df.drop('Unnamed: 0',axis=1,inplace=True)
+#df.drop_duplicates(keep = False, inplace=True)
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
