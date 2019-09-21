@@ -39,8 +39,10 @@ app.layout = html.Div(children=[
     html.Div(id='table-container1')
 ])
 
-@app.callback(dash.dependencies.Output('display-value', 'children'),
-              [dash.dependencies.Input('dropdown', 'value')])
+@app.callback(
+    dash.dependencies.Output('table-container1', 'children'),
+    [dash.dependencies.Input('dropdown1', 'value'),
+    dash.dependencies.Input('dropdown2', 'value')])
 
 def display_table(dropdown_value1,dropdown_value2):
     if dropdown_value1 is None:
