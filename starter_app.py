@@ -23,7 +23,7 @@ def generate_table(dataframe, max_rows=20):
 
         # Body
         [html.Tr([
-            html.Td(dataframe.ix[i][col]) for col in dataframe.columns
+            html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
         ]) for i in range(min(len(dataframe), max_rows))]
     )
 
