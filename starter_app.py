@@ -28,14 +28,14 @@ def generate_table(dataframe, max_rows=20):
     )
 
 
-app.layout = html.Div(children=[
+app.layout = html.Div(style={'backgroundColor': '#AEAEB2'},children=[
     html.H4(children='FAERS Drug Data 2012-2019'),
     dcc.Dropdown(id='dropdown1', options=[
         {'label': i, 'value': i} for i in df.AGE.unique()
-    ], multi=True, placeholder='Filter by age...'),
+    ], multi=True, placeholder='Filter by age...',style={'backgroundColor':'#F2F2F7','height': '30px', 'width': '300px'}),
     dcc.Dropdown(id='dropdown2', options=[
         {'label': i, 'value': i} for i in df.GNDR_COD.unique()
-    ], multi=True, placeholder='Filter by gender...'),
+    ], multi=True, placeholder='Filter by gender...',style={'height': '30px', 'width': '300px'}),
     html.Div(id='table-container1')
 ])
 
