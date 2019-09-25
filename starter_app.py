@@ -1,61 +1,110 @@
-import os
-
 import dash
 import dash_core_components as dcc
+import dash_table as dt
 import dash_html_components as html
 
-import pandas as pd
+from dash.dependencies import Output, Input
+from dash.exceptions import PreventUpdate
 
-df = pd.read_csv('pain_result_small.csv')
-#df = df.drop('Unnamed: 0',axis=1)
-df = df.drop_duplicates()
+import plotly.graph_objs as go
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+sample_data = {
+    'series': {
+        'data': [
+            {'outcome': 'Pain', 'likelihood': 0},
+            {'outcome': 'Nausea', 'likelihood': 0},
+            {'outcome': 'Constipation', 'likelihood': 1},
+            {'outcome': 'Depression', 'likelihood': 0.5},
+            {'outcome': 'Insomnia', 'likelihood': 0}
+        ],
+        'style': {
+            'backgroundColor': '#ffffff'
+        }
+    },
+    'series2': {
+        'data': [
+            {'outcome': 'Pain', 'likelihood': 0},
+            {'outcome': 'Nausea', 'likelihood': 0.5},
+            {'outcome': 'Constipation', 'likelihood': 0},
+            {'outcome': 'Depression', 'likelihood': 1},
+            {'outcome': 'Insomnia', 'likelihood': 0}
+        ],
+        'style': {
+            'backgroundColor': '#ffffff'
+        }
+    }
+}
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__)
 
-server = app.server
+app.layout = html.Div([
+    html.H1('Multi output example'),
+    dcc.Dropdown(id='data-dropdown', options=[
+        {'label': 'fake patient 1', 'value': 'series'},
+        {'label': 'fake patient 2', 'value': 'series2'},
+    ], value='series'),
+    html.Div([
+        dcc.Graph(id='graph'),
+        dt.DataTable(id='data-table', columns=[
+            {'name': 'Outcome', 'id': 'outcome'},
+            {'name': 'Likelihood', 'id': 'likelihood'}
+        ])
+    ])
+], id='container')
 
-def generate_table(dataframe, max_rows=20):
-    return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in dataframe.columns])] +
 
-        # Body
-        [html.Tr([
-            html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
-        ]) for i in range(min(len(dataframe), max_rows))]
+@app.callback([
+    Output('graph', 'figure'),
+    Output('data-table', 'data'),
+    Output('data-table', 'columns'),
+    Output('container', 'style')
+], [Input('data-dropdown', 'value')])
+def multi_output(value):
+    if value is None:
+        raise PreventUpdate
+
+    selected = sample_data[value]
+    data = selected['data']
+    columns = [
+        {'name': k.capitalize(), 'id': k}
+        for k in data[0].keys()
+    ]
+    figure = go.Figure(
+        data=[
+            go.Bar(y=[y['likelihood']], text=y['outcome'], name=y['outcome'])
+            for y in data
+        ]
     )
 
-
-app.layout = html.Div(style={'backgroundColor': '#AEAEB2'},children=[
-    html.H4(children='FAERS Drug Data 2012-2019'),
-    dcc.Dropdown(id='dropdown1', options=[
-        {'label': i, 'value': i} for i in df.AGE.unique()
-    ], multi=True, placeholder='Filter by age...',style={'backgroundColor':'#F2F2F7','height': '30px', 'width': '300px'}),
-    dcc.Dropdown(id='dropdown2', options=[
-        {'label': i, 'value': i} for i in df.GNDR_COD.unique()
-    ], multi=True, placeholder='Filter by gender...',style={'height': '30px', 'width': '300px'}),
-    html.Div(id='table-container1')
-])
-
-@app.callback(
-    dash.dependencies.Output('table-container1', 'children'),
-    [dash.dependencies.Input('dropdown1', 'value'),
-    dash.dependencies.Input('dropdown2', 'value')])
-
-def display_table(dropdown_value1,dropdown_value2):
-    if dropdown_value1 is None:
-        return 'Pick the values'
-
-    #listing = 'hi'
-    #print(type(df.GNDR_COD))
-    #listing = generate_table(df[(df.AGE.isin(dropdown_value1)) & (df.GNDR_COD.isin(dropdown_value2))])
-    listing_df = df[(df.AGE.isin(dropdown_value1))]
-    if (dropdown_value2 is None) == False:
-        listing_df = listing_df[df.GNDR_COD.isin(dropdown_value2)]
-        listing = generate_table(listing_df)
-        return listing
+    figure.update_layout(
+    title=go.layout.Title(
+        text="Plot Title",
+        xref="paper",
+        x=0
+    ),
+    xaxis=go.layout.XAxis(
+        showticklabels=False,
+        title=go.layout.xaxis.Title(
+            text="Adverse Outcomes",
+            font=dict(
+                family="Courier New, monospace",
+                size=18,
+                color="#7f7f7f",
+            )
+        )
+    ),
+    yaxis=go.layout.YAxis(
+        title=go.layout.yaxis.Title(
+            text="Likelihood (Based on Classifier)",
+            font=dict(
+                family="Courier New, monospace",
+                size=18,
+                color="#7f7f7f"
+            )
+        )
+    )
+    )
+    return figure, data, columns, selected['style']
     
 if __name__ == '__main__':
     app.run_server(debug=True)
