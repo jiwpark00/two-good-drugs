@@ -76,6 +76,33 @@ app.layout = html.Div([
 
     style_as_list_view=False,
 
+    style_data_conditional=[
+
+    {
+            'if': {
+                'column_id': 'Pain_Risk',
+                'filter_query': '{Pain_Risk} eq "Medium_Risk"'
+            },
+            'backgroundColor': '#FF9F0A',
+            'color': 'white',
+        },
+        {
+            'if': {
+                'column_id': 'Pain_Risk',
+                'filter_query': '{Pain_Risk} eq "High_Risk"'
+            },
+            'backgroundColor': '#FF375F',
+            'color': 'white',
+            },
+             {
+            'if': {
+                'column_id': 'Pain_Risk',
+                'filter_query': '{Pain_Risk} eq "No_Risk"'
+            },
+            'backgroundColor': '#3D9970',
+            'color': 'white',
+            }]
+
 ),
 
 
