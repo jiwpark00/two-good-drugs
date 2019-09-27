@@ -1,110 +1,160 @@
 import dash
+from dash.dependencies import Input, Output
 import dash_core_components as dcc
-import dash_table as dt
 import dash_html_components as html
+import dash_table
+import pandas as pd
+from dash.dependencies import Input, Output, State
+import base64
+import numpy as np
 
-from dash.dependencies import Output, Input
-from dash.exceptions import PreventUpdate
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-import plotly.graph_objs as go
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-sample_data = {
-    'series': {
-        'data': [
-            {'outcome': 'Pain', 'likelihood': 0},
-            {'outcome': 'Nausea', 'likelihood': 0},
-            {'outcome': 'Constipation', 'likelihood': 1},
-            {'outcome': 'Depression', 'likelihood': 0.5},
-            {'outcome': 'Insomnia', 'likelihood': 0}
-        ],
-        'style': {
-            'backgroundColor': '#ffffff'
-        }
-    },
-    'series2': {
-        'data': [
-            {'outcome': 'Pain', 'likelihood': 0},
-            {'outcome': 'Nausea', 'likelihood': 0.5},
-            {'outcome': 'Constipation', 'likelihood': 0},
-            {'outcome': 'Depression', 'likelihood': 1},
-            {'outcome': 'Insomnia', 'likelihood': 0}
-        ],
-        'style': {
-            'backgroundColor': '#ffffff'
-        }
-    }
-}
+server=app.server
 
-app = dash.Dash(__name__)
+df = pd.read_csv('df_prediction_list_pain.csv')
+
+data=df.to_dict("records")
+
+image_filename = 'red-pill-blue-pill.png'
+encoded_image = base64.b64encode(open(image_filename, 'rb').read())
 
 app.layout = html.Div([
-    html.H1('Multi output example'),
-    dcc.Dropdown(id='data-dropdown', options=[
-        {'label': 'fake patient 1', 'value': 'series'},
-        {'label': 'fake patient 2', 'value': 'series2'},
-    ], value='series'),
-    html.Div([
-        dcc.Graph(id='graph'),
-        dt.DataTable(id='data-table', columns=[
-            {'name': 'Outcome', 'id': 'outcome'},
-            {'name': 'Likelihood', 'id': 'likelihood'}
-        ])
+
+    html.H1(children='INTER:ACTION?'),
+
+    html.Img(src='data:image/png;base64,{}'.format(encoded_image),
+        style={'height': '150px', 'width': '300px'}),
+
+    html.H4("Predicting likely adverse outcomes for drug2drug interactions" ),
+
+    html.H5("Please pick the relevant patient information: drugs, age, weight"),
+
+    dcc.Dropdown(
+    id="drop-down",
+
+    options=[
+        {"label": i, "value": i} for i in sorted(df['First Drug'].unique())],
+    value='XANAX',style={'height': '30px', 'width': '300px'}
+),
+
+    dcc.Dropdown(
+    id="drop-down2",
+    value='LYRICA',style={'height': '30px', 'width': '300px'}
+),
+
+    dcc.Dropdown(
+    id="drop-down3",
+
+    options=[
+        {"label": i, "value": i} for i in sorted(df['AGE'].unique())],
+    value=65,style={'height': '30px', 'width': '300px'}
+),
+
+    dcc.Dropdown(
+    id="drop-down4",
+
+    options=[
+        {"label": i, "value": i} for i in sorted(df['WT'].unique())],
+    value=57,style={'height': '30px', 'width': '300px'}
+),
+
+    dcc.Dropdown(
+    id="drop-down5",
+
+    options=[
+        {"label": i, "value": i} for i in sorted(df['Gender'].unique())],
+    value='F',style={'height': '30px', 'width': '300px'}
+),
+
+    dash_table.DataTable(
+
+    id='table-filtering',
+    columns=[{"name": i, "id": i} for i in df.columns],
+
+    style_as_list_view=False,
+
+),
+
+
     ])
-], id='container')
 
+@app.callback(Output('drop-down2', 'options'),
+    [Input('drop-down', "value")])
 
-@app.callback([
-    Output('graph', 'figure'),
-    Output('data-table', 'data'),
-    Output('data-table', 'columns'),
-    Output('container', 'style')
-], [Input('data-dropdown', 'value')])
-def multi_output(value):
-    if value is None:
-        raise PreventUpdate
+def set_cities_options(selected_country):
+    return [{"label": i, "value": i} for i in sorted(df[df['First Drug'] == selected_country]['Second Drug'].unique())]
 
-    selected = sample_data[value]
-    data = selected['data']
-    columns = [
-        {'name': k.capitalize(), 'id': k}
-        for k in data[0].keys()
-    ]
-    figure = go.Figure(
-        data=[
-            go.Bar(y=[y['likelihood']], text=y['outcome'], name=y['outcome'])
-            for y in data
-        ]
-    )
+@app.callback(
+    dash.dependencies.Output('drop-down2', 'value'),
+    [dash.dependencies.Input('drop-down2', 'options')])
+def set_cities_value(available_options):
+    return available_options[0]['value']
 
-    figure.update_layout(
-    title=go.layout.Title(
-        text="Plot Title",
-        xref="paper",
-        x=0
-    ),
-    xaxis=go.layout.XAxis(
-        showticklabels=False,
-        title=go.layout.xaxis.Title(
-            text="Adverse Outcomes",
-            font=dict(
-                family="Courier New, monospace",
-                size=18,
-                color="#7f7f7f",
-            )
-        )
-    ),
-    yaxis=go.layout.YAxis(
-        title=go.layout.yaxis.Title(
-            text="Likelihood (Based on Classifier)",
-            font=dict(
-                family="Courier New, monospace",
-                size=18,
-                color="#7f7f7f"
-            )
-        )
-    )
-    )
-    return figure, data, columns, selected['style']
+@app.callback(Output('drop-down3', 'options'),
+    [Input('drop-down', "value"),
+    Input('drop-down2',"value")])
+
+def set_cities_options(selected_country1,selected_country2):
+    return [{"label": i, "value": i} for i in sorted(df[(df['First Drug'] == selected_country1) & 
+        (df['Second Drug'] == selected_country2)]['AGE'].unique())]
+
+@app.callback(
+    dash.dependencies.Output('drop-down3', 'value'),
+    [dash.dependencies.Input('drop-down3', 'options')])
+def set_cities_value(available_options):
+    return available_options[0]['value']
+
+@app.callback(Output('drop-down4', 'options'),
+    [Input('drop-down', "value"),
+    Input('drop-down2',"value"),
+    Input('drop-down3',"value")])
+
+def set_cities_options(selected_country1, selected_country2, selected_country3):
+    return [{"label": i, "value": i} for i in sorted(df[(df['First Drug'] == selected_country1) & 
+        (df['Second Drug'] == selected_country2) & (df['AGE'] == selected_country3)]['WT'].unique())]
+
+@app.callback(
+    dash.dependencies.Output('drop-down4', 'value'),
+    [dash.dependencies.Input('drop-down4', 'options')])
+def set_cities_value(available_options):
+    return available_options[0]['value']
+
+@app.callback(Output('drop-down5', 'options'),
+    [Input('drop-down', "value"),
+    Input('drop-down2',"value"),
+    Input('drop-down3',"value"),
+    Input('drop-down4', "value")])
+
+def set_cities_options(selected_country1,selected_country2,selected_country3,selected_country4):
+    return [{"label": i, "value": i} for i in sorted(df[(df['First Drug'] == selected_country1) & 
+        (df['Second Drug'] == selected_country2) & (df['AGE'] == selected_country3) &
+        (df['WT'] == selected_country4)]['Gender'].unique())]
+
+@app.callback(
+    dash.dependencies.Output('drop-down5', 'value'),
+    [dash.dependencies.Input('drop-down5', 'options')])
+def set_cities_value(available_options):
+    return available_options[0]['value']
+
+@app.callback(
+    Output('table-filtering', "data"),
+    [Input('drop-down', "value"),
+    Input('drop-down2', "value"),
+    Input('drop-down3', "value"),
+    Input('drop-down4', "value"),
+    Input('drop-down5', "value")])
+
+def update_table(value1, value2, value3, value4, value5):
     
+    df_f=df
+    dff=df_f.loc[(df_f["First Drug"]==value1) & (df_f["Second Drug"]==value2) & 
+    (df_f["AGE"]==value3) & (df_f["WT"]==value4) & 
+    (df_f["Gender"]==value5)]
+    return dff.to_dict("records")
+
+ 
 if __name__ == '__main__':
     app.run_server(debug=True)
