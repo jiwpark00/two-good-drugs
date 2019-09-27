@@ -37,12 +37,12 @@ app.layout = html.Div([
 
     options=[
         {"label": i, "value": i} for i in sorted(df['First Drug'].unique())],
-    value='XANAX',style={'height': '30px', 'width': '300px'}
+    value='ASPIRIN',style={'height': '30px', 'width': '300px'}
 ),
 
     dcc.Dropdown(
     id="drop-down2",
-    value='LYRICA',style={'height': '30px', 'width': '300px'}
+    value='NEXIUM',style={'height': '30px', 'width': '300px'}
 ),
 
     dcc.Dropdown(
@@ -50,7 +50,7 @@ app.layout = html.Div([
 
     options=[
         {"label": i, "value": i} for i in sorted(df['AGE'].unique())],
-    value=65,style={'height': '30px', 'width': '300px'}
+    value=70,style={'height': '30px', 'width': '300px'}
 ),
 
     dcc.Dropdown(
