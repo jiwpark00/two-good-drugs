@@ -109,6 +109,28 @@ app.layout = html.Div([
 
 ),
 
+html.H4("For calculating new patients, please fill this form below"),
+
+html.H5("Is Drug X cardiovascular?"),
+dcc.RadioItems(
+    options=[
+        {'label': 'Yes', 'value': 'DRUG_X_Cardio'},
+        {'label': 'No', 'value': 'DRUG_X_Not_Cardio'}
+    ],
+    value='DRUG_X_Not_Cardio',
+    labelStyle={'display': 'inline-block'}
+),  
+
+html.H5("Is Drug X chemotherapy?"),
+dcc.RadioItems(
+    options=[
+        {'label': 'Yes', 'value': 'DRUG_X_Chemo'},
+        {'label': 'No', 'value': 'DRUG_X_Not_Chemo'}
+    ],
+    value='DRUG_X_Not_Chemo',
+    labelStyle={'display': 'inline-block'}
+)  
+
 
     ])
 
