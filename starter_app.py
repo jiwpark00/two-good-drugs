@@ -18,6 +18,8 @@ df = pd.read_csv('df_prediction_list_pain.csv')
 
 data=df.to_dict("records")
 
+column_numbers = [4,5,8,9]
+
 image_filename = 'red-pill-blue-pill.png'
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
 
@@ -37,12 +39,12 @@ app.layout = html.Div([
 
     options=[
         {"label": i, "value": i} for i in sorted(df['First Drug'].unique())],
-    value='ASPIRIN',style={'height': '30px', 'width': '300px'}
+    value='ASPIRIN',style={'font-size':'20px','height': '30px', 'width': '300px'}
 ),
 
     dcc.Dropdown(
     id="drop-down2",
-    value='NEXIUM',style={'height': '30px', 'width': '300px'}
+    value='NEXIUM',style={'font-size':'20px','height': '30px', 'width': '300px'}
 ),
 
     dcc.Dropdown(
@@ -50,7 +52,7 @@ app.layout = html.Div([
 
     options=[
         {"label": i, "value": i} for i in sorted(df['AGE'].unique())],
-    value=70,style={'height': '30px', 'width': '300px'}
+    value=70,style={'font-size':'20px','height': '30px', 'width': '300px'}
 ),
 
     dcc.Dropdown(
@@ -58,7 +60,7 @@ app.layout = html.Div([
 
     options=[
         {"label": i, "value": i} for i in sorted(df['WT'].unique())],
-    value=57,style={'height': '30px', 'width': '300px'}
+    value=57,style={'font-size':'20px','height': '30px', 'width': '300px'}
 ),
 
     dcc.Dropdown(
@@ -66,15 +68,17 @@ app.layout = html.Div([
 
     options=[
         {"label": i, "value": i} for i in sorted(df['Gender'].unique())],
-    value='F',style={'height': '30px', 'width': '300px'}
+    value='F',style={'font-size':'20px','height': '30px', 'width': '300px'}
 ),
 
     dash_table.DataTable(
 
     id='table-filtering',
-    columns=[{"name": i, "id": i} for i in df.columns],
+    columns=[{"name": i, "id": i} for i in df.columns[column_numbers]],
 
     style_as_list_view=False,
+
+    style_cell={'fontSize':20},
 
     style_data_conditional=[
 
