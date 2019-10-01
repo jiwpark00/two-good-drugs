@@ -14,7 +14,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 server=app.server
 
-df = pd.read_csv('df_prediction_list_pain.csv')
+df = pd.read_csv('df_prediction_list_nausea.csv')
 
 data=df.to_dict("records")
 
@@ -39,12 +39,12 @@ app.layout = html.Div([
 
     options=[
         {"label": i, "value": i} for i in sorted(df['First Drug'].unique())],
-    value='ASPIRIN',style={'font-size':'20px','height': '30px', 'width': '300px'}
+    value='ANDROGEL',style={'font-size':'20px','height': '30px', 'width': '300px'}
 ),
 
     dcc.Dropdown(
     id="drop-down2",
-    value='NEXIUM',style={'font-size':'20px','height': '30px', 'width': '300px'}
+    value='VICODIN',style={'font-size':'20px','height': '30px', 'width': '300px'}
 ),
 
     dcc.Dropdown(
@@ -84,52 +84,30 @@ app.layout = html.Div([
 
     {
             'if': {
-                'column_id': 'Pain_Risk',
-                'filter_query': '{Pain_Risk} eq "Medium_Risk"'
+                'column_id': 'Nausea_Risk',
+                'filter_query': '{Nausea_Risk} eq "Medium_Risk"'
             },
             'backgroundColor': '#FF9F0A',
             'color': 'white',
         },
         {
             'if': {
-                'column_id': 'Pain_Risk',
-                'filter_query': '{Pain_Risk} eq "High_Risk"'
+                'column_id': 'Nausea_Risk',
+                'filter_query': '{Nausea_Risk} eq "High_Risk"'
             },
             'backgroundColor': '#FF375F',
             'color': 'white',
             },
              {
             'if': {
-                'column_id': 'Pain_Risk',
-                'filter_query': '{Pain_Risk} eq "No_Risk"'
+                'column_id': 'Nausea_Risk',
+                'filter_query': '{Nausea_Risk} eq "No_Risk"'
             },
             'backgroundColor': '#3D9970',
             'color': 'white',
             }]
 
-),
-
-html.H4("For calculating new patients, please fill this form below"),
-
-html.H5("Is Drug X cardiovascular?"),
-dcc.RadioItems(
-    options=[
-        {'label': 'Yes', 'value': 'DRUG_X_Cardio'},
-        {'label': 'No', 'value': 'DRUG_X_Not_Cardio'}
-    ],
-    value='DRUG_X_Not_Cardio',
-    labelStyle={'display': 'inline-block'}
-),  
-
-html.H5("Is Drug X chemotherapy?"),
-dcc.RadioItems(
-    options=[
-        {'label': 'Yes', 'value': 'DRUG_X_Chemo'},
-        {'label': 'No', 'value': 'DRUG_X_Not_Chemo'}
-    ],
-    value='DRUG_X_Not_Chemo',
-    labelStyle={'display': 'inline-block'}
-)  
+)
 
 
     ])
