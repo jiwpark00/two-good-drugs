@@ -180,8 +180,8 @@ def set_cities_value(available_options):
     Input('drop-down5', "value")])
 
 def update_table(value1, value2, value3, value4, value5):
-    with open('DecisionTree_Pain_model.pkl', 'rb') as infile:
-        loaded_model = pickle.load(infile) # key for loading 
+    #with open('DecisionTree_Pain_model.pkl', 'rb') as infile:
+    #    loaded_model = pickle.load(infile) # key for loading 
 
     # random_data = [[50, 70,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
     #      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  1,  0,  0,
