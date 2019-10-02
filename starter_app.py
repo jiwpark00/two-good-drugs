@@ -180,8 +180,8 @@ def set_cities_value(available_options):
     Input('drop-down5', "value")])
 
 def update_table(value1, value2, value3, value4, value5):
-    filename = 'DecisionTree_Pain_model.pkl' # or .sav
-    loaded_model = joblib.load(filename)
+    # filename = 'DecisionTree_Pain_model.pkl' # or .sav
+    # loaded_model = joblib.load(filename)
 
     # random_data = [[50, 70,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
     #      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  1,  0,  0,
