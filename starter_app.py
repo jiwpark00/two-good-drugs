@@ -7,7 +7,7 @@ import pandas as pd
 from dash.dependencies import Input, Output, State
 import base64
 import numpy as np
-from sklearn.externals import joblib
+import joblib
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -181,8 +181,7 @@ def set_cities_value(available_options):
 
 def update_table(value1, value2, value3, value4, value5):
     filename = 'DecisionTree_Pain_model.pkl' # or .sav
-    with open(filename, 'wb') as outfile:
-        joblib.dump(classifier_DM, outfile) # key for saving
+    loaded_model = joblib.load(filename)
 
     # random_data = [[50, 70,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
     #      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  1,  0,  0,
