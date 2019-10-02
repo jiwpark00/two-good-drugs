@@ -7,7 +7,7 @@ import pandas as pd
 from dash.dependencies import Input, Output, State
 import base64
 import numpy as np
-from sklearn.externals import joblib
+#from sklearn.externals import joblib
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
