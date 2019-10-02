@@ -7,6 +7,7 @@ import pandas as pd
 from dash.dependencies import Input, Output, State
 import base64
 import numpy as np
+import pickle
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -179,7 +180,16 @@ def set_cities_value(available_options):
     Input('drop-down5', "value")])
 
 def update_table(value1, value2, value3, value4, value5):
-    
+    with open('DecisionTree_Pain_model.pkl', 'rb') as infile:
+        loaded_model = pickle.load(infile) # key for loading 
+
+    # random_data = [[50, 70,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,
+    #      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  1,  0,  0,
+    #      0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    #      0,  0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0]]
+
+    # print(loaded_model.predict_proba(random_data)[0])
+
     df_f=df
     dff=df_f.loc[(df_f["First Drug"]==value1) & (df_f["Second Drug"]==value2) & 
     (df_f["AGE"]==value3) & (df_f["WT"]==value4) & 
