@@ -15,11 +15,11 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 server=app.server
 
-df = pd.read_csv('df_prediction_list_nausea.csv')
+df = pd.read_csv('df_prediction_list_total.csv')
 
 data=df.to_dict("records")
 
-column_numbers = [4,5,8,9]
+column_numbers = [4,5,8,9,10]
 
 image_filename = 'red-pill-blue-pill.png'
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
@@ -85,24 +85,24 @@ app.layout = html.Div([
 
     {
             'if': {
-                'column_id': 'Nausea_Risk',
-                'filter_query': '{Nausea_Risk} eq "Medium_Risk"'
+                'column_id': 'Risk',
+                'filter_query': '{Risk} eq "Medium_Risk"'
             },
             'backgroundColor': '#FF9F0A',
             'color': 'white',
         },
         {
             'if': {
-                'column_id': 'Nausea_Risk',
-                'filter_query': '{Nausea_Risk} eq "High_Risk"'
+                'column_id': 'Risk',
+                'filter_query': '{Risk} eq "High_Risk"'
             },
             'backgroundColor': '#FF375F',
             'color': 'white',
             },
              {
             'if': {
-                'column_id': 'Nausea_Risk',
-                'filter_query': '{Nausea_Risk} eq "No_Risk"'
+                'column_id': 'Risk',
+                'filter_query': '{Risk} eq "No_Risk"'
             },
             'backgroundColor': '#3D9970',
             'color': 'white',
