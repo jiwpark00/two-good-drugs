@@ -1,4 +1,4 @@
-,AGE,WT,Gender,First Drug,Second Drug,First Drug Form,Second Drug Form,Outcome,Patient Indications,Prediction,Pain_Risk
+,AGE,WT,Gender,First Drug,Second Drug,First Drug Form,Second Drug Form,Outcome,Patient Indications,Prediction,Risk
 0,70,80,F,CRESTOR,SEROQUEL,TABLET,TABLET,Pain,Multiple allergies,0,No_Risk
 1,57,136,F,NEXIUM,PULMICORT,CAPSULE,INHALATION POWDER,Pain,Multiple allergies,0,No_Risk
 2,40,63,F,YAZ,YASMIN,Film-coated tablet,Film-coated tablet,Pain,Premenstrual syndrome,1,High_Risk
