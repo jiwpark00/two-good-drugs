@@ -19,7 +19,7 @@ df = pd.read_csv('df_prediction_list_total_.csv')
 
 data=df.to_dict("records")
 
-column_numbers = [4,5,8,9,10]
+column_numbers = [4,5,8,9,10,11]
 
 image_filename = 'red-pill-blue-pill.png'
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
