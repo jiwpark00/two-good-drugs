@@ -15,7 +15,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 server=app.server
 
-df = pd.read_csv('df_prediction_list_total.csv')
+df = pd.read_csv('df_prediction_list_total_.csv')
 
 data=df.to_dict("records")
 
